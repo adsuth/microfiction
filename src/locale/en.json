@@ -1,0 +1,146 @@
+{
+  "auth": {
+    
+  },
+  "browse": {
+    "search": {
+      "text_placeholder": "Search for microfiction...",
+      "show_read": "Show Read"
+    },
+    "no_results": "No results for your query :/",
+    "no_suggestions": "We have no suggestions for you at the moment... Keep reading and we'll come up with some!",
+    "no_suggestions_for_guest": "You need to be logged in for suggestions!"
+  },
+  "create": {
+    "labels": {
+      "title": "Story Title",
+      "blurb": "Blurb",
+      "metadata": "Metadata",
+      "visibility_on": "Story is Public",
+      "visibility_off": "Story is Private",
+      "content": "Story Content",
+
+      "thumbnail": "Thumbnail Image",
+      "genre": "Select a Genre"
+    },
+    "success": {
+      "publish": "Your story was published!",
+      "discard": "Your story was discarded"
+    },
+    "tooltip": {
+      "title": "What your story is called",
+      "blurb": "A snappy overview shown on the story card",
+      "visibility_on": "Anyone can see this story",
+      "visibility_off": "Only logged-in users can see this story"
+    },
+    "actions": {
+      "discard": "Discard",
+      "save": "Save as Draft",
+      "publish": "Publish"
+    },
+    "hud": {
+      "posting_as_guest": "You are not logged in so you are posting as a guest!",
+      "error": "An error occurred while posting your story...",
+      "not_logged_in": "You'll need to log in first"
+    },
+    "guest": {
+      "title": "Before you go...",
+      "body": "If you make an account in the future, you might want to take note of this code so you can claim it later!",
+      "confirm": "Got it",
+      "tooltip": "Copy this key",
+      "copied": "Copied key to clipboard!",
+
+      "timeout_start": "You can't post again for another",
+      "timeout_end": "seconds"
+    }
+  },
+  "stories": {
+    "header": "Your Stories",
+    "no_stories_header": "You don't have any stories...",
+    "no_stories_body": "... Let's fix that, click the create button to start sharing your writing now!",
+    "card": {
+      "missing": {
+        "blurb": "No blurb was given"
+      }
+    },
+    "tooltip": {
+      "new": "New Story"
+    }
+  },
+  "misc": {
+    "none": "None",
+    "microfiction": "Microfiction",
+    "genre": "Genre",
+    "created": "Created at",
+    "updated": "Updated at",
+    "your_rating": "Give Your Rating",
+    "written_by": "Written by",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "claim": "Claim"
+
+  },
+  "enum": {
+    "genre": {
+      "none": "None",
+      "comedy": "Comedy",
+      "romance": "Romance",
+      "horror": "Horror",
+      "fantasy": "Fantasy",
+      "science_fiction": "Science Fiction",
+      "mystery": "Mystery",
+      "thriller": "Thriller",
+      "drama": "Drama",
+      "adventure": "Adventure",
+      "historical": "Historical"
+    },
+    "visibility": {
+      "draft": "Draft",
+      "private": "Private",
+      "public": "Public"
+    }
+  },
+
+  "header": {
+    "menu": {
+      "login": "Login",
+      "logout": "Logout",
+      "create": "Create a new story",
+      "stories": "View your stories",
+      "claim_story": "Claim stories",
+      "leaderboard": "Site Leaderboard"
+    }
+  },
+
+  "dialog": {
+    "claim_story": {
+      "title": "Claim Story",
+      "content": "Enter your code below to claim a story. This code was given to you when you published the story.",
+      "code_label": "Story code"
+    },
+    "edit_story": {
+      "title": "Edit Story",
+      "delete_story": "Delete This Story",
+      "visibility": "Change Visibility"
+    },
+    "delete_story": {
+      "title": "Are You Sure?",
+      "content": "This cannot be undone.",
+      "success": "Story was successfully deleted"
+    },
+    "leaderboard": {
+      "title": "Site Leaderboard",
+      "no_user": "—"
+    }
+  },
+
+  "populate": {
+    "story": {
+      "guest": "Generate 5 Guest Stories",
+      "fixed_genre": "Generate 10 Stories by 'test' User"
+    },
+    "header": {
+      "story": "Populate Stories"
+    } 
+  }
+}
