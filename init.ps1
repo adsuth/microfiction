@@ -1,6 +1,6 @@
 # Prompt for a password if not provided as an argument
 param (
-  [switch]$local 
+  [switch]$prod
 )
 
 $entity = "microfiction"
@@ -13,10 +13,17 @@ function Create-Dotenv-File
 
   $uri = Get-Mongo-Uri
   $access_token = Get-Auth0-Access-Token
+  $build = "DEV"
+
+  if ($prod)
+  {
+    $build = "PROD"
+  }
 
   $env_content = @"
   MONGO_URI=$uri
   AUTH0_API_ACCESS_TOKEN=$access_token
+  BUILD=$build
 "@
 
   Set-Content -Path ".env" -Value $env_content
@@ -29,7 +36,7 @@ function Create-Dotenv-File
 
 function Get-Mongo-Uri
 {
-  if ( $local )
+  if (-not $prod)
   {
     Write-Host "Using local database..." -ForegroundColor Yellow
     return "mongodb://localhost:27017/$entity"

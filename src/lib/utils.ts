@@ -75,7 +75,7 @@ export function isGenreInList(genre: string, allGenres: string[]) {
  * Pass a icon from @type {LogIcon} as the first arg to change the prefix
  */
 export function dbout(...args: any[]) {
-  if (env.PROD === "true") return
+  if (env.BUILD === "PROD") return
   if (!Object.values(LogIcon).includes(args[0]))
     args = [LogIcon.DEFAULT, ...args]
   console.log(...args)
