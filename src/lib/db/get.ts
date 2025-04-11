@@ -1,7 +1,6 @@
 "use server"
 
 import { UserProfile } from "@auth0/nextjs-auth0/client"
-import axios from "axios"
 import mongoose from "mongoose"
 import { GUEST_USER, GUEST_USER_ID } from "../decs"
 import Activity from "../schemata/activity"
@@ -10,6 +9,7 @@ import Story, { StoryType } from "../schemata/story"
 import { calcWeightedRating, dbout, json } from "../utils"
 import { LogIcon, PERFORM_DATABASE_ACTION } from "./types"
 import { db_like } from "./utils"
+import axios from "axios"
 
 //#region Story getters
 export async function db_fetchAllStories() {

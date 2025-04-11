@@ -1,6 +1,6 @@
 {
   "name": "microfiction",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -19,11 +19,10 @@
     "@mui/material": "^6.4.2",
     "@mui/material-nextjs": "^6.4.2",
     "axios": "^1.8.4",
-    "cm4025-coursework-adsuth": "file:",
     "jotai": "^2.12.1",
     "microfiction": "file:",
     "mongoose": "^8.10.0",
-    "next": "15.1.6",
+    "next": "^15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
