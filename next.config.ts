@@ -8,6 +8,9 @@ const nextConfig = {
   assetPrefix: isProd ? "" : "",
   basePath: isProd ? "" : "",
   // output: "export",
+  head: {
+    title: "microfiction",
+  },
 }
 
 export default nextConfig
