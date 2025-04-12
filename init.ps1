@@ -90,7 +90,7 @@ function Create-Auth0-Dotenv-File
 }
 
 # get packages
-npm i --force
+npm i --legacy-peer-deps
 
 Create-Dotenv-File
 Create-Auth0-Dotenv-File
