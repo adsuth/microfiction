@@ -1,5 +1,5 @@
 
-<div style="text-align: center;">
+<div style="text-align: center; align: center">
   <h1>Microfiction</h1>
   <h2>Coursework for Enterprise Web Development</h2>
 
