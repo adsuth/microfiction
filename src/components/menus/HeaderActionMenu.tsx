@@ -16,6 +16,8 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import ClaimStoryDialog from "../dialog/ClaimStoryDialog"
 import LeaderBoard from "../dialog/LeaderBoard"
 import BareLink from "../misc/BareLink"
+import AboutDialog from "../dialog/AboutDialog"
+import InfoIcon from '@mui/icons-material/Info';
 
 //#region Styles
 const StyledMenu = styled((props: MenuProps) => (
@@ -68,6 +70,7 @@ export default function HeaderActionMenu() {
   const [authOption, setAuthOption] = useState("login")
   const [openClaimStoryDialog, setOpenClaimStoryDialog] = useState(false)
   const [openLeaderboard, setOpenLeaderboard] = useState(false)
+  const [openAbout, setOpenAbout] = useState(false)
 
   //#region Modal handlers
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -92,6 +95,7 @@ export default function HeaderActionMenu() {
         user={user as UserProfile}
       />
       <LeaderBoard open={openLeaderboard} setOpen={setOpenLeaderboard} />
+      <AboutDialog open={openAbout} setOpen={setOpenAbout} />
 
       <IconButton
         onClick={handleClick}
@@ -142,6 +146,10 @@ export default function HeaderActionMenu() {
         <MenuItem onClick={() => setOpenLeaderboard(true)}>
           <EmojiEventsIcon />
           {locale(`header.menu.leaderboard`)}
+        </MenuItem>
+        <MenuItem onClick={() => setOpenAbout(true)}>
+          <InfoIcon />
+          {locale(`header.menu.about`)}
         </MenuItem>
 
         <Divider sx={{ my: 0.5 }} />

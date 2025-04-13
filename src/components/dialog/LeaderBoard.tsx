@@ -10,14 +10,15 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Divider,
   IconButton,
-  Stack, Typography,
+  Stack,
+  Typography,
 } from "@mui/material"
 import { useAtom } from "jotai"
 import { useEffect, useState } from "react"
+import Microfiction from "../misc/Microfiction"
 
 interface DialogProps {
   open: boolean
@@ -33,22 +34,37 @@ export default function LeaderBoard(props: DialogProps) {
   const [topThreeReaders, setTopThreeReaders] = useState<UserProfile[]>([])
 
   useEffect(() => {
-    db_fetchTopThreeAuthors()
-      .then( topThree => setTopThreeAuthors(topThree) )
-    db_fetchTopThreeReaders()
-      .then( topThree => setTopThreeReaders(topThree) )
+    db_fetchTopThreeAuthors().then((topThree) => setTopThreeAuthors(topThree))
+    db_fetchTopThreeReaders().then((topThree) => setTopThreeReaders(topThree))
   }, [])
 
-  function renderTopThree(topThree: UserProfile[])
-  {
-    if ( topThree.length === 0 ) return <Box sx={{display: "flex", p: 1, justifyContent: "center", alignItems: "center"}}>
-      <CircularProgress />
-    </Box>
-    return <>
-      <Typography variant="body1" fontSize={"1.4rem"} color="initial">#1 {topThree[0]?.nickname ?? locale("dialog.leaderboard.no_user")}</Typography>
-      <Typography variant="body1" fontSize={"1.2rem"} color="initial">#2 {topThree[1]?.nickname ?? locale("dialog.leaderboard.no_user")}</Typography>
-      <Typography variant="body1" fontSize={"1.0rem"} color="initial">#3 {topThree[2]?.nickname ?? locale("dialog.leaderboard.no_user")}</Typography>
-    </>
+  function renderTopThree(topThree: UserProfile[]) {
+    if (topThree.length === 0)
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            p: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )
+    return (
+      <>
+        <Typography variant="body1" fontSize={"1.4rem"} color="initial">
+          #1 {topThree[0]?.nickname ?? locale("dialog.leaderboard.no_user")}
+        </Typography>
+        <Typography variant="body1" fontSize={"1.2rem"} color="initial">
+          #2 {topThree[1]?.nickname ?? locale("dialog.leaderboard.no_user")}
+        </Typography>
+        <Typography variant="body1" fontSize={"1.0rem"} color="initial">
+          #3 {topThree[2]?.nickname ?? locale("dialog.leaderboard.no_user")}
+        </Typography>
+      </>
+    )
   }
 
   return (
@@ -60,22 +76,25 @@ export default function LeaderBoard(props: DialogProps) {
       >
         <CloseIcon />
       </IconButton>
-      
-      <DialogTitle> { locale("dialog.leaderboard.title")} </DialogTitle>
-      
+
+      <DialogTitle> {locale("dialog.leaderboard.title")} </DialogTitle>
+
       <DialogContent>
         <Stack direction="row" spacing={4} sx={{ width: "100%" }}>
           <Stack direction="column" sx={{ flex: 1 }}>
-            <Typography variant="subtitle1" color="initial" margin="auto">Top Authors</Typography>
+            <Typography variant="subtitle1" color="initial" margin="auto">
+              Top Authors
+            </Typography>
             {renderTopThree(topThreeAuthors)}
           </Stack>
           <Divider orientation="vertical" flexItem />
           <Stack direction="column" sx={{ flex: 1 }}>
-            <Typography variant="subtitle1" color="initial" margin="auto">Top Readers</Typography>
+            <Typography variant="subtitle1" color="initial" margin="auto">
+              Top Readers
+            </Typography>
             {renderTopThree(topThreeReaders)}
           </Stack>
         </Stack>
-      
       </DialogContent>
     </Dialog>
   )

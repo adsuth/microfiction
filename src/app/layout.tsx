@@ -1,9 +1,9 @@
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
-import { Roboto } from "next/font/google"
-import { ThemeProvider } from "@mui/material/styles"
-import theme from "../lib/theme"
 import SiteHeader from "@/components/SiteHeader"
 import { UserProvider } from "@auth0/nextjs-auth0/client"
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
+import { ThemeProvider } from "@mui/material/styles"
+import { Roboto } from "next/font/google"
+import theme from "../lib/theme"
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -19,6 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>Microfiction</title>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className={roboto.variable} style={{ minHeight: "100vh" }}>
         <UserProvider>
           <AppRouterCacheProvider options={{ enableCssLayer: true }}>

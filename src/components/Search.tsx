@@ -22,7 +22,7 @@ export default function SearchBar() {
         value={query}
         onChange={(ev) => setQuery(ev.target.value.toLowerCase())}
       />
-      <Stack direction={"row"} sx={{width: "100%"}}>
+      <Stack direction={"row"} sx={{placeItems:"center"}}>
         <Box sx={{ flex: 5 }}>
           <GenrePicker genre={genre as Genre} setGenre={setGenre} />
         </Box>

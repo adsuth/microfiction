@@ -19,6 +19,7 @@
     "@mui/material": "^6.4.2",
     "@mui/material-nextjs": "^6.4.2",
     "axios": "^1.8.4",
+    "cm4025-coursework-adsuth": "file:",
     "jotai": "^2.12.1",
     "microfiction": "file:",
     "mongoose": "^8.10.0",

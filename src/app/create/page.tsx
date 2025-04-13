@@ -32,8 +32,6 @@ async function tryPublish(story: any) {
 }
 
 export default function Create() {
-  // ! we should check if there is a selected story for editing and set all props before loading
-
   const [title, setTitle] = useState<string>("")
   const [blurb, setBlurb] = useState<string>("")
   const [content, setContent] = useState<string>("")
@@ -67,37 +65,33 @@ export default function Create() {
   }
 
   //#region Action Handlers
-  function handleSave() {
-    console.warn("unimplemented...")
-  }
-  function canGuestPost()
-  {
+  function canGuestPost() {
     // non guest, proceed
-    if (userId !== GUEST_USER_ID) return true
+    if (userId && userId !== GUEST_USER_ID) return true
 
     // guest not posted in session, proceed
-    if (!guestLastPosted) 
-    {
-      setGuestLastPosted(new Date())
+    if (!guestLastPosted) {
+      setGuestLastPosted(Date.now())
       return true
     }
 
-    // guest cannot post within 5 mins 
-    const timeDiff = timeDifference(guestLastPosted as Date, new Date())
-    if ( timeDiff > GUEST_UPLOAD_TIMEOUT) 
-    {
+    // guest cannot post within 5 mins
+    const timeDiff = timeDifference(guestLastPosted, Date.now())
+    if (timeDiff > GUEST_UPLOAD_TIMEOUT) {
       setHudMessage({
-        message: `${locale( "create.guest.timeout_start" )} ${timeDiff} ${locale("create.guest.timeout_end")}`,
+        message: `${locale("create.guest.timeout_start")} ${timeDiff} ${locale(
+          "create.guest.timeout_end"
+        )}`,
         type: HudMessageTypeEnum.BAD,
       })
       return false
     }
-    
-    setGuestLastPosted(new Date())
+
+    setGuestLastPosted(Date.now())
     return true
   }
   function handlePublish() {
-    if ( !canGuestPost() ) return
+    if (!canGuestPost()) return
 
     const story = {
       title,

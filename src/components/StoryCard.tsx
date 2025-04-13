@@ -16,6 +16,7 @@ import {
   CardMedia,
   Chip,
   Rating,
+  Stack,
   Typography,
 } from "@mui/material"
 import { useAtom } from "jotai"
@@ -42,16 +43,16 @@ export default function StoryCard(props: StoryType) {
       }}
     >
       {/* Image Section */}
-      <Box sx={{ display: "flex" }}>
+      <Stack direction="row">
         <CardMedia
           component="img"
-          sx={{ width: 200 }}
           image={decodeBase64Image(props)}
+          sx={{flex: 2}}
           alt="Story Cover"
         />
 
         {/* Content Section */}
-        <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <CardContent sx={{ flex: 3, display: "flex", flexDirection: "column" }}>
           <Typography variant="h5" fontWeight="bold" color="text.secondary">
             {title}
           </Typography>
@@ -108,7 +109,7 @@ export default function StoryCard(props: StoryType) {
             </Box>
           </Box>
         </CardContent>
-      </Box>
+      </Stack>
     </Card>
   )
 }

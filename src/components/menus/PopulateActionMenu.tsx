@@ -1,6 +1,6 @@
 "use client"
 import { hudMessageAtom } from "@/lib/atoms"
-import { populateStories } from "@/lib/db/populate"
+import { populateStories as doPopulateAction } from "@/lib/db/populate"
 import { locale } from "@/lib/utils"
 import SaveAltIcon from "@mui/icons-material/SaveAlt"
 import ScienceIcon from "@mui/icons-material/Science"
@@ -12,7 +12,9 @@ import { useAtom } from "jotai"
 import * as React from "react"
 import { useState } from "react"
 import { HudMessageTypeEnum } from "../HudMessage"
-import { PopulateStoryType } from "@/lib/defs"
+import { PopulateActionType } from "@/lib/defs"
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 //#region Styles
 const StyledMenu = styled((props: MenuProps) => (
@@ -74,9 +76,9 @@ export default function PopulateActionMenu() {
   }
   //#endregion
 
-  async function doPopulateAction(type: PopulateStoryType)
+  async function handlePopulateAction(type: PopulateActionType)
   {
-    try { await populateStories(type); setHudMessage({message: "Population success!", type: HudMessageTypeEnum.GOOD}) }
+    try { await doPopulateAction(type); setHudMessage({message: "Debug panel action was successful! (you may need to refresh)", type: HudMessageTypeEnum.GOOD}) }
     catch (err) { setHudMessage({message: (err as Error).message, type: HudMessageTypeEnum.BAD}) }
   }
 
@@ -105,14 +107,33 @@ export default function PopulateActionMenu() {
       >
         
         <ListSubheader>{locale("populate.header.story")}</ListSubheader>
-        <MenuItem onClick={() => doPopulateAction(PopulateStoryType.GUEST)}>
-          {/* <SaveAltIcon /> */}
+        <MenuItem onClick={() => handlePopulateAction(PopulateActionType.GUEST)}>
+          <AddCircleOutlineIcon />
           {locale(`populate.story.guest`)}
         </MenuItem>
-        <MenuItem onClick={() => doPopulateAction(PopulateStoryType.FIXED_GENRE)}>
-          {/* <SaveAltIcon /> */}
+        <MenuItem onClick={() => handlePopulateAction(PopulateActionType.FIXED_GENRE)}>
+          <AddCircleOutlineIcon />
           {locale(`populate.story.fixed_genre`)}
         </MenuItem>
+        <MenuItem onClick={() => handlePopulateAction(PopulateActionType.RANDOM_GENRES)}>
+          <AddCircleOutlineIcon />
+          {locale(`populate.story.random_genres`)}
+        </MenuItem>
+        
+        <ListSubheader>{locale("populate.header.delete")}</ListSubheader>
+        <MenuItem onClick={() => handlePopulateAction(PopulateActionType.DELETE_ALL_STORIES)}>
+          <RemoveCircleOutlineIcon />
+          {locale(`populate.delete.stories`)}
+        </MenuItem>
+        <MenuItem onClick={() => handlePopulateAction(PopulateActionType.DELETE_ALL_ACTIVITY)}>
+          <RemoveCircleOutlineIcon />
+          {locale(`populate.delete.activity`)}
+        </MenuItem>
+        <MenuItem onClick={() => handlePopulateAction(PopulateActionType.DELETE_ALL_RATINGS)}>
+          <RemoveCircleOutlineIcon />
+          {locale(`populate.delete.ratings`)}
+        </MenuItem>
+
 
       </StyledMenu>
     </>

@@ -1,9 +1,9 @@
 "use client"
 
-import { HudMessageType, HudMessageTypeEnum } from "@/components/HudMessage"
+import StoryEditDialog from "@/components/dialog/StoryEditDialog"
+import { HudMessageType } from "@/components/HudMessage"
 import PageLoading from "@/components/skeletons/PageLoading"
 import StoryCard from "@/components/StoryCard"
-import StoryEditDialog from "@/components/dialog/StoryEditDialog"
 import { selectedStoryAtom } from "@/lib/atoms"
 import { db_fetchStoriesByAuthor } from "@/lib/db/get"
 import { StoryType } from "@/lib/schemata/story"
@@ -12,16 +12,15 @@ import { useUser } from "@auth0/nextjs-auth0/client"
 import AddIcon from "@mui/icons-material/Add"
 import { Fab, Link, Stack, Tooltip, Typography } from "@mui/material"
 import { useAtom } from "jotai"
-import { SetStateAction, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
-export default function StoriesPage() 
-{
+export default function StoriesPage() {
   const [stories, setStories] = useState<StoryType[] | null>(null)
   const [hudMessage, setHudMessage] = useState<HudMessageType>()
   const { user, isLoading } = useUser()
 
-  const [ modalOpen, setModalOpen ] = useState(false)
-  const [ selectedStory, ] = useAtom(selectedStoryAtom)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedStory] = useAtom(selectedStoryAtom)
 
   // make sure the user is signed in, then get all their stories.
   useEffect(() => {
@@ -39,17 +38,16 @@ export default function StoriesPage()
   if (isLoading || (user && !stories)) return <PageLoading />
 
   // user not logged in, redirect
-  if (!user) 
-  {
+  if (!user) {
     window.location.href = "/api/auth/login"
     return <PageLoading />
   }
-  
+
   return (
     <>
-      <StoryEditDialog 
-        story={selectedStory as StoryType} 
-        open={modalOpen} 
+      <StoryEditDialog
+        story={selectedStory as StoryType}
+        open={modalOpen}
         setOpen={setModalOpen}
       />
 
@@ -60,15 +58,14 @@ export default function StoriesPage()
         sx={{ minHeight: "100vh" }}
       >
         {getStoriesPageContent(stories as StoryType[])}
-
       </Stack>
 
-      <Link href="/create" sx={{ m: 8, bottom: 0, right: 0, position: "absolute" }}>
+      <Link
+        href="/create"
+        sx={{ m: 8, bottom: 0, right: 0, position: "absolute" }}
+      >
         <Tooltip title={locale("stories.tooltip.new")}>
-          <Fab
-            size="large"
-            color="primary"
-          >
+          <Fab size="large" color="primary">
             <AddIcon />
           </Fab>
         </Tooltip>

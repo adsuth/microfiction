@@ -3,21 +3,24 @@
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material"
 import { Key, useEffect, useState } from "react"
 
-import { genreAtom, queryAtom, selectedStoryAtom, showReadAtom } from "@/lib/atoms"
-import { BrowseTabEnum, Genre } from "@/lib/defs"
+import {
+  genreAtom,
+  queryAtom,
+  showReadAtom
+} from "@/lib/atoms"
+import { db_fetchAllStories } from "@/lib/db/get"
+import { BrowseTabEnum } from "@/lib/defs"
 import { StoryType } from "@/lib/schemata/story"
 import {
   applyStoryFilters,
-  canViewStory,
   locale,
-  sortStoryForTab,
+  sortStoryForTab
 } from "@/lib/utils"
 import { UserProfile, useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
 import PageLoading from "./skeletons/PageLoading"
-import StoryCard from "./StoryCard"
 import StoryCardSkeleton from "./skeletons/StoryCardSkeleton"
-import { db_fetchAllStories } from "@/lib/db/get"
+import StoryCard from "./StoryCard"
 
 //#region Tab Panel
 interface TabPanelProps {
@@ -32,7 +35,15 @@ function TabPanel(props: TabPanelProps) {
   return (
     <div role="tabpanel" hidden={value !== index}>
       {value === index && (
-        <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            paddingTop: 2,
+            w: "100%",
+          }}
+        >
           {children}
         </Box>
       )}
@@ -52,7 +63,6 @@ export default function BrowseStack() {
   const [query] = useAtom<string>(queryAtom)
   const [genre] = useAtom(genreAtom)
   const [showRead] = useAtom(showReadAtom)
-  const [selectedStory] = useAtom(selectedStoryAtom)
 
   const { user, isLoading } = useUser()
 
@@ -75,7 +85,6 @@ export default function BrowseStack() {
       .then((stories) => setFilteredStories(stories))
   }, [allStories, query, genre, showRead, tab])
   // #endregion
-  
 
   function generateStoryCards() {
     if (filteredStories === null)
@@ -115,8 +124,12 @@ export default function BrowseStack() {
 
   return (
     <>
-      <Stack p={"0 4"} m={"auto"}>
-        <Tabs value={tab} onChange={handleTabChange} sx={{ m: "auto", w: "100%"}}>
+      <Stack m={"auto"}>
+        <Tabs
+          value={tab}
+          onChange={handleTabChange}
+          sx={{ m: "auto", w: "100%" }}
+        >
           <Tab label={BrowseTabEnum[0]} />
           <Tab label={BrowseTabEnum[1]} />
           <Tab label={BrowseTabEnum[2]} />

@@ -18,6 +18,8 @@ import {
   db_hasReadStory
 } from "./db/get"
 import { StoryType } from "./schemata/story"
+import words from "../locale/words.json"
+
 
 export function getGenreIconClass(genre: string | Genre) {
   if (typeof genre === "string") return genreIcons[genre.toUpperCase()]
@@ -60,6 +62,13 @@ export function getAllGenres(includeNone = false) {
       .map((key) => Number(key))
       .filter((key) => validKey(key) && !isNaN(key))
   )
+}
+
+export function getAllRawGenres(includeNone = false) {
+  const validKey = (key: number) => (includeNone ? true : key)
+  return Object.keys(Genre)
+    .map((key) => Number(key))
+    .filter((key) => validKey(key) && !isNaN(key))
 }
 
 export function json(object: any) {
@@ -156,7 +165,7 @@ export function decodeBase64Image(story: StoryType) {
   const { thumbnail, genre } = story
 
   if (!thumbnail)
-    return `https://fakeimg.pl/400x400?text=${getGenreEmoji(genre)}`
+    return `https://fakeimg.pl/200x200?text=${getGenreEmoji(genre)}`
   const buffer = Buffer.from(thumbnail, "base64")
   return `data:image/png;base64,${buffer.toString("base64")}`
 }
@@ -186,9 +195,9 @@ export function canViewStory(visibility: Visibility, loggedIn: boolean) {
 /**
  * Returns the elapsed time in ms since start
  */
-export function timeDifference(start: Date, end: Date): number {
+export function timeDifference(start: number, end: number): number {
   if (!start || !end) return -1
-  return end.getTime() - start.getTime()
+  return end - start
 }
 
 export function timeInSeconds(ms: number) {
@@ -291,4 +300,21 @@ export async function sortStoryForTab(
     case BrowseTabEnum.SUGGESTED:
       return suggestStories([...stories], userId)
   }
+}
+
+export function capitalize(string: string)
+{
+  return string[0].toUpperCase() + string.slice(1)
+}
+
+export function randomStoryTitle()
+{
+  const randomAdjective = capitalize( randomChoiceFrom( words.adjectives ) )
+  const randomNoun      = capitalize( randomChoiceFrom( words.nouns ) )
+  return `${randomAdjective} ${randomNoun}`;
+} 
+
+export function randomChoiceFrom(array: any[])
+{
+  return array[Math.floor(Math.random() * array.length)]
 }

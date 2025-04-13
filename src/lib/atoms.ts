@@ -18,4 +18,4 @@ export const hudMessageAtom = atom<HudMessageType>()
 export const showReadAtom = atom<boolean>(true)
 
 
-export const guestLastPostedAtom = atom<Date>()
+export const guestLastPostedAtom = atom<number>()

@@ -62,7 +62,12 @@ export enum BrowseTabEnum {
   SUGGESTED,
 }
 
-export enum PopulateStoryType {
+export enum PopulateActionType {
   GUEST = 0,
-  FIXED_GENRE
+  FIXED_GENRE,
+  RANDOM_GENRES,
+
+  DELETE_ALL_STORIES,
+  DELETE_ALL_ACTIVITY,
+  DELETE_ALL_RATINGS,
 }

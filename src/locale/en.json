@@ -71,14 +71,13 @@
     "none": "None",
     "microfiction": "Microfiction",
     "genre": "Genre",
-    "created": "Created at",
-    "updated": "Updated at",
+    "created": "Created",
+    "updated": "Updated",
     "your_rating": "Give Your Rating",
     "written_by": "Written by",
     "cancel": "Cancel",
     "delete": "Delete",
     "claim": "Claim"
-
   },
   "enum": {
     "genre": {
@@ -87,7 +86,6 @@
       "romance": "Romance",
       "horror": "Horror",
       "fantasy": "Fantasy",
-      "science_fiction": "Science Fiction",
       "mystery": "Mystery",
       "thriller": "Thriller",
       "drama": "Drama",
@@ -108,7 +106,8 @@
       "create": "Create a new story",
       "stories": "View your stories",
       "claim_story": "Claim stories",
-      "leaderboard": "Site Leaderboard"
+      "leaderboard": "Site Leaderboard",
+      "about": "About"
     }
   },
 
@@ -131,16 +130,28 @@
     "leaderboard": {
       "title": "Site Leaderboard",
       "no_user": "—"
+    },
+    "about": {
+      "title": "About Microfiction",
+      "content": "Microfiction is a Twitter-like app created for the CM4025 Enterprise Web Systems course by me, Adam.",
+      "footer": "Feel free to check out the Git repository for more info!"
     }
   },
 
   "populate": {
     "story": {
       "guest": "Generate 5 Guest Stories",
-      "fixed_genre": "Generate 10 Stories by 'test' User"
+      "fixed_genre": "Generate 10 Stories of a Single Genre By Test User",
+      "random_genres": "Generate 20 Random Stories by Random Dummy Users"
+    },
+    "delete" : {
+      "stories": "Delete All Stories",
+      "activity": "Delete All User Activity",
+      "ratings": "Delete All User Ratings (Includes Activity)"
     },
     "header": {
-      "story": "Populate Stories"
+      "story": "Populate Stories",
+      "delete": "Delete Actions"
     } 
   }
 }
