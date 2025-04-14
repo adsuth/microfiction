@@ -19,6 +19,7 @@ import {
   Tooltip,
   Typography, Button,
   IconButton,
+  Box,
 } from "@mui/material"
 import { useAtom } from "jotai"
 import { SetStateAction, useState } from "react"
@@ -70,55 +71,21 @@ export default function StoryEditDialog(props: DialogProps) {
         <DialogContentText>
           {locale("dialog.edit_story.content")}
         </DialogContentText>
-        <Stack>
-          <Typography variant="subtitle1">
-            {locale("dialog.edit_story.visibility")}
-          </Typography>
-          <Tooltip
-            placement="bottom-start"
-            title={locale(
-              `create.tooltip.visibility_${
-                story.visibility === Visibility.PUBLIC ? "on" : "off"
-              }`
-            )}
-          >
-            <FormControlLabel
-              labelPlacement="bottom"
-              label={locale(
-                `create.labels.visibility_${
-                  story.visibility === Visibility.PUBLIC ? "on" : "off"
-                }`
-              )}
-              control={
-                <Switch
-                  value={story.visibility === Visibility.PUBLIC}
-                  checked={story.visibility === Visibility.PUBLIC}
-                  onChange={(ev) =>
-                    updateVisibility(inferVisibility(ev.target.checked))
-                  }
-                />
-              }
-            />
-          </Tooltip>
-          
-          <Divider />
-          
           <Stack direction={"column"}>
             <Typography variant="subtitle1">
-              {locale("dialog.edit_story.delete_story")}
+                {locale("dialog.edit_story.delete_story")}
             </Typography>
-            <Button
-              variant="text"
-              color="error"
-              endIcon={<DeleteIcon />}
-              onClick={() => setDeleteOpen(true)}
-            >
-              {locale("misc.delete")}
-            </Button>
-            
-          </Stack>
-
-
+            <Box sx={{display: "flex", placeItems: "center", w: "100%"}}>
+              <Button
+                variant="text"
+                color="error"
+                endIcon={<DeleteIcon />}
+                sx={{m: "auto"}}
+                onClick={() => setDeleteOpen(true)}
+              >
+                {locale("misc.delete")}
+              </Button>
+            </Box>
         </Stack>
       </DialogContent>
     </Dialog>

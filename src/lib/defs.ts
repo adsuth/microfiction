@@ -61,6 +61,9 @@ export enum BrowseTabEnum {
   TOP,
   SUGGESTED,
 }
+export enum UserStoriesTabEnum {
+  STORIES = 0,
+}
 
 export enum PopulateActionType {
   GUEST = 0,

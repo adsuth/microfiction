@@ -1,11 +1,12 @@
 "use client"
 
-import { Box, Stack, Tab, Tabs, Typography } from "@mui/material"
+import { Box, setRef, Stack, Tab, Tabs, Typography } from "@mui/material"
 import { Key, useEffect, useState } from "react"
 
 import {
   genreAtom,
   queryAtom,
+  selectedStoryAtom,
   showReadAtom
 } from "@/lib/atoms"
 import { db_fetchAllStories } from "@/lib/db/get"
@@ -21,36 +22,7 @@ import { useAtom } from "jotai"
 import PageLoading from "./skeletons/PageLoading"
 import StoryCardSkeleton from "./skeletons/StoryCardSkeleton"
 import StoryCard from "./StoryCard"
-
-//#region Tab Panel
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index } = props
-
-  return (
-    <div role="tabpanel" hidden={value !== index}>
-      {value === index && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            paddingTop: 2,
-            w: "100%",
-          }}
-        >
-          {children}
-        </Box>
-      )}
-    </div>
-  )
-}
-//#endregion
+import { TabPanel } from "./TabPanel"
 
 export default function BrowseStack() {
   const [allStories, setAllStories] = useState<StoryType[]>([])
@@ -65,6 +37,17 @@ export default function BrowseStack() {
   const [showRead] = useAtom(showReadAtom)
 
   const { user, isLoading } = useUser()
+  const [selectedStory] = useAtom(selectedStoryAtom)
+
+  // // #region auto refresh
+  // // const [refresh, setRefresh] = useState<number>(Date.now())
+  // // useEffect(() => {
+  // //   const refreshInterval = setInterval(() => {
+  // //     setRefresh(Date.now())
+  // //   }, 10_000)
+  // //   return clearInterval(refreshInterval)
+  // // }, [])
+  // // #endregion
 
   const handleTabChange = (ev: React.SyntheticEvent, val: number) => {
     if (filteredStories === null) return // prevents switching before filters finish
@@ -73,8 +56,11 @@ export default function BrowseStack() {
 
   // #region UseEffects
   useEffect(() => {
-    db_fetchAllStories().then((stories) => setAllStories(stories as any))
-  }, [])
+    if ( selectedStory ) return
+    db_fetchAllStories().then((stories) => {
+      setAllStories(stories as any)
+    })
+  }, [selectedStory])
 
   useEffect(() => {
     if (allStories.length === 0) return

@@ -5,7 +5,7 @@ interface SvgProps {
 }
 export default function Microfiction(props: SvgProps) 
 {
-  const fill = props?.fill ?? "rgb(53,155,255)"
+  const fill = props?.fill ?? "#359bff"
   const {height} = props
 
   return (

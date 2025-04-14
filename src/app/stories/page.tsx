@@ -4,15 +4,17 @@ import StoryEditDialog from "@/components/dialog/StoryEditDialog"
 import { HudMessageType } from "@/components/HudMessage"
 import PageLoading from "@/components/skeletons/PageLoading"
 import StoryCard from "@/components/StoryCard"
+import { TabPanel } from "@/components/TabPanel"
 import { selectedStoryAtom } from "@/lib/atoms"
 import { db_fetchStoriesByAuthor } from "@/lib/db/get"
+import { UserStoriesTabEnum } from "@/lib/defs"
 import { StoryType } from "@/lib/schemata/story"
 import { locale } from "@/lib/utils"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import AddIcon from "@mui/icons-material/Add"
-import { Fab, Link, Stack, Tooltip, Typography } from "@mui/material"
+import { Fab, Link, Stack, Tab, Tabs, Tooltip, Typography } from "@mui/material"
 import { useAtom } from "jotai"
-import { useEffect, useState } from "react"
+import { Key, useEffect, useState } from "react"
 
 export default function StoriesPage() {
   const [stories, setStories] = useState<StoryType[] | null>(null)
@@ -21,6 +23,11 @@ export default function StoriesPage() {
 
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedStory] = useAtom(selectedStoryAtom)
+  const [tab, setTab] = useState<UserStoriesTabEnum>(UserStoriesTabEnum.STORIES)
+
+  const handleTabChange = (ev: React.SyntheticEvent, val: number) => {
+    setTab(val)
+  }
 
   // make sure the user is signed in, then get all their stories.
   useEffect(() => {
@@ -44,25 +51,34 @@ export default function StoriesPage() {
   }
 
   return (
-    <>
+    <Stack direction={"column"} gap={4} paddingY={4} paddingX={8}>
       <StoryEditDialog
         story={selectedStory as StoryType}
         open={modalOpen}
         setOpen={setModalOpen}
       />
 
-      <Stack
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        sx={{ minHeight: "100vh" }}
-      >
+      <Stack m={"auto"}>
+        <Tabs
+            value={tab}
+            onChange={handleTabChange}
+            sx={{ m: "auto", w: "100%" }}
+          >
+          <Tab label={UserStoriesTabEnum[0]} />
+        </Tabs>
+
+      <TabPanel index={UserStoriesTabEnum.STORIES} value={tab}>
         {getStoriesPageContent(stories as StoryType[])}
+      </TabPanel>
       </Stack>
 
       <Link
         href="/create"
-        sx={{ m: 8, bottom: 0, right: 0, position: "absolute" }}
+        sx={{
+          position: "fixed",
+          bottom: "5vh",
+          right: "5vw",
+        }}
       >
         <Tooltip title={locale("stories.tooltip.new")}>
           <Fab size="large" color="primary">
@@ -70,7 +86,7 @@ export default function StoriesPage() {
           </Fab>
         </Tooltip>
       </Link>
-    </>
+    </Stack>
   )
 }
 
@@ -78,13 +94,9 @@ function getStoriesPageContent(stories: StoryType[]) {
   if (stories.length > 0)
     return (
       <>
-        <Stack
-          direction={"column"}
-          gap={2}
-          sx={{ width: "50%", m: "auto", p: 8 }}
-        >
-          {makeStoryCards(stories)}
-        </Stack>
+        {stories.map((story) => (
+          <StoryCard key={story._id as Key} {...story} />
+        ))}
       </>
     )
 
@@ -100,10 +112,4 @@ function getStoriesPageContent(stories: StoryType[]) {
       </Stack>
     </>
   )
-}
-
-function makeStoryCards(stories: StoryType[]) {
-  return stories.map((story: StoryType) => (
-    <StoryCard key={story._id as string} {...story} />
-  ))
 }

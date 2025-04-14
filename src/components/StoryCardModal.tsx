@@ -30,7 +30,7 @@ export default function StoryCardModal() {
   const [author, setAuthor] = useState<UserProfile | null>(null)
   const { user, isLoading } = useUser()
 
-  const [story] = useAtom(selectedStoryAtom)
+  const [story, setStory] = useAtom(selectedStoryAtom)
 
   useEffect(() => {
     if (!story) return
@@ -49,6 +49,11 @@ export default function StoryCardModal() {
         }
     )
   }, [story, isLoading])
+
+  function handleSetOpen(newValue: boolean)
+  {
+    setOpen(newValue)
+  }
 
   if (!author || !story) return <></>
 
@@ -72,7 +77,7 @@ export default function StoryCardModal() {
         >
           {/* Close Button */}
           <IconButton
-            onClick={() => setOpen(false)}
+            onClick={() => handleSetOpen(false)}
             sx={{ position: "absolute", top: 8, right: 8 }}
           >
             <CloseIcon />

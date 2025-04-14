@@ -12,7 +12,7 @@ import { Genre } from "./defs";
  */
 export const queryAtom = atom<string>("")
 export const genreAtom = atom<Genre>(Genre.NONE)
-export const selectedStoryAtom = atom<StoryType>()
+export const selectedStoryAtom = atom<StoryType | null>()
 
 export const hudMessageAtom = atom<HudMessageType>()
 export const showReadAtom = atom<boolean>(true)
