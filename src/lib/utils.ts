@@ -165,7 +165,7 @@ export function decodeBase64Image(story: StoryType) {
   const { thumbnail, genre } = story
 
   if (!thumbnail)
-    return `https://fakeimg.pl/200x200?text=${getGenreEmoji(genre)}`
+    return `https://placehold.co/400`
   const buffer = Buffer.from(thumbnail, "base64")
   return `data:image/png;base64,${buffer.toString("base64")}`
 }
