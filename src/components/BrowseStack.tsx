@@ -7,16 +7,12 @@ import {
   genreAtom,
   queryAtom,
   selectedStoryAtom,
-  showReadAtom
+  showReadAtom,
 } from "@/lib/atoms"
 import { db_fetchAllStories } from "@/lib/db/get"
 import { BrowseTabEnum } from "@/lib/defs"
 import { StoryType } from "@/lib/schemata/story"
-import {
-  applyStoryFilters,
-  locale,
-  sortStoryForTab
-} from "@/lib/utils"
+import { applyStoryFilters, locale, sortStoryForTab } from "@/lib/utils"
 import { UserProfile, useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
 import PageLoading from "./skeletons/PageLoading"
@@ -27,7 +23,7 @@ import { TabPanel } from "./TabPanel"
 export default function BrowseStack() {
   const [allStories, setAllStories] = useState<StoryType[]>([])
   const [filteredStories, setFilteredStories] = useState<StoryType[] | null>(
-    null
+    null,
   )
 
   const [tab, setTab] = useState<BrowseTabEnum>(0)
@@ -39,16 +35,6 @@ export default function BrowseStack() {
   const { user, isLoading } = useUser()
   const [selectedStory] = useAtom(selectedStoryAtom)
 
-  // // #region auto refresh
-  // // const [refresh, setRefresh] = useState<number>(Date.now())
-  // // useEffect(() => {
-  // //   const refreshInterval = setInterval(() => {
-  // //     setRefresh(Date.now())
-  // //   }, 10_000)
-  // //   return clearInterval(refreshInterval)
-  // // }, [])
-  // // #endregion
-
   const handleTabChange = (ev: React.SyntheticEvent, val: number) => {
     if (filteredStories === null) return // prevents switching before filters finish
     setTab(val)
@@ -56,7 +42,7 @@ export default function BrowseStack() {
 
   // #region UseEffects
   useEffect(() => {
-    if ( selectedStory ) return
+    if (selectedStory) return
     db_fetchAllStories().then((stories) => {
       setAllStories(stories as any)
     })

@@ -15,14 +15,16 @@ import HudMessage from "@/components/HudMessage"
 import PopulateActionMenu from "./menus/PopulateActionMenu"
 import Microfiction from "./misc/Microfiction"
 
-export default function SiteHeader()
-{  
+export default function SiteHeader() {
   return (
     <>
       <HudMessage />
       <AppBar position="static" sx={{ width: "100%" }}>
         <Container>
-            <Toolbar disableGutters sx={{ w: "100%", justifyContent: "space-between" }}>
+          <Toolbar
+            disableGutters
+            sx={{ w: "100%", justifyContent: "space-between" }}
+          >
             <Link
               href="/"
               sx={{
@@ -34,14 +36,24 @@ export default function SiteHeader()
               }}
             >
               <Microfiction fill={"#fff"} height={"2rem"} />
-              <Typography variant="h6">{locale("misc.microfiction")}</Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                  },
+                }}
+              >
+                {locale("misc.microfiction")}
+              </Typography>
             </Link>
 
             <Stack direction={"row"} sx={{ placeItems: "center" }}>
               <PopulateActionMenu />
               <HeaderActionMenu />
             </Stack>
-            </Toolbar>
+          </Toolbar>
         </Container>
       </AppBar>
     </>

@@ -7,7 +7,6 @@ import { GUEST_UPLOAD_TIMEOUT, GUEST_USER_ID } from "@/lib/decs"
 import { Genre, PublishedStoryType, Visibility } from "@/lib/defs"
 import { inferVisibility, locale, timeDifference } from "@/lib/utils"
 import { useUser } from "@auth0/nextjs-auth0/client"
-import { CopyField } from "@eisberg-labs/mui-copy-field"
 import {
   Button,
   ButtonGroup,
@@ -16,13 +15,15 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
-  Grid2,
+  Grid,
+  IconButton,
   Stack,
   Switch,
   TextField,
   Tooltip,
   Typography,
 } from "@mui/material"
+import ContentCopyIcon from "@mui/icons-material/ContentCopy"
 import { useAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { HudMessageTypeEnum } from "../../components/HudMessage"
@@ -80,7 +81,7 @@ export default function Create() {
     if (timeDiff > GUEST_UPLOAD_TIMEOUT) {
       setHudMessage({
         message: `${locale("create.guest.timeout_start")} ${timeDiff} ${locale(
-          "create.guest.timeout_end"
+          "create.guest.timeout_end",
         )}`,
         type: HudMessageTypeEnum.BAD,
       })
@@ -139,17 +140,22 @@ export default function Create() {
             <Typography variant="body1" color="initial">
               {locale("create.guest.body")}
             </Typography>
-            <CopyField
-              value={storyId}
-              onCopySuccess={() => {
-                setHudMessage({
-                  message: locale("create.guest.copied"),
-                  type: HudMessageTypeEnum.GOOD,
-                  time: 2000,
-                })
-              }}
-              copyTooltip={locale("create.guest.tooltip")}
-            />
+            <Stack direction={"row"} gap={1}>
+              <TextField value={storyId} />
+              <IconButton
+                onClick={() => {
+                  navigator.clipboard.writeText(storyId || "")
+                  setHudMessage({
+                    message: locale("create.guest.copied"),
+                    type: HudMessageTypeEnum.GOOD,
+                    time: 2000,
+                  })
+                }}
+                title={locale("create.guest.tooltip")}
+              >
+                <ContentCopyIcon />
+              </IconButton>
+            </Stack>
           </Stack>
         </DialogContent>
         <DialogActions sx={{ m: "auto" }}>
@@ -170,7 +176,7 @@ export default function Create() {
           // handleSave()
         }}
       >
-        <Stack gap={4} sx={{ p: 16, m: "auto" }}>
+        <Stack gap={4} sx={{ p: 0, m: "auto" }}>
           <Tooltip
             placement="bottom-start"
             title={locale("create.tooltip.title")}
@@ -202,7 +208,7 @@ export default function Create() {
             />
           </Tooltip>
 
-          <Grid2
+          <Grid
             container
             spacing={1}
             direction="row"
@@ -216,7 +222,7 @@ export default function Create() {
               title={locale(
                 `create.tooltip.visibility_${
                   visibility === Visibility.PUBLIC ? "on" : "off"
-                }`
+                }`,
               )}
             >
               <FormControlLabel
@@ -224,7 +230,7 @@ export default function Create() {
                 label={locale(
                   `create.labels.visibility_${
                     visibility === Visibility.PUBLIC ? "on" : "off"
-                  }`
+                  }`,
                 )}
                 control={
                   <Switch
@@ -239,7 +245,7 @@ export default function Create() {
               />
             </Tooltip>
             <GenrePicker genre={genre} setGenre={setGenre} />
-          </Grid2>
+          </Grid>
           <TextField
             label={locale("create.labels.content")}
             minRows={5}

@@ -47,7 +47,13 @@ export default function StoryCard(props: StoryType) {
         <CardMedia
           component="img"
           image={decodeBase64Image(props)}
-          sx={{flex: 2}}
+          sx={{
+            flex: 2,
+            display: {
+              xs: "none",
+              sm: "block",
+            },
+          }}
           alt="Story Cover"
         />
 

@@ -3,14 +3,19 @@ import { MONGO_CONN_PARAMS } from "../decs"
 
 // ? stolen from https://github.com/vercel/next.js/blob/canary/examples/with-mongodb-mongoose/lib/dbConnect.ts
 
-declare global {
-  var mongoose: any // This must be a `var` and not a `let / const`
+type MongooseCache = {
+  conn: typeof mongoose | null
+  promise: Promise<typeof mongoose> | null
 }
 
-let cached = global.mongoose
+declare global {
+  var mongooseCache: MongooseCache // This must be a `var` and not a `let / const`
+}
+
+let cached = globalThis.mongooseCache
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
+  cached = globalThis.mongooseCache = { conn: null, promise: null }
 }
 
 export default async function dbConnect() {
