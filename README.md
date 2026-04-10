@@ -7,3 +7,13 @@
 
   A Twitter-like website where users can post short stories known as "microfictions"
 </div>
+
+## About
+| Element | Technology |
+| --- | ---- |
+| Framework | Next.JS |
+| UI | React MUI |
+| Database | MongoDB |
+| Authentication | Auth0 |
+
+The app has a Cron Web Job to update the metrics of each of the stories (average rating, view count et cetera) every 15 minutes.

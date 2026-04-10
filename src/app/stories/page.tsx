@@ -18,7 +18,6 @@ import { Key, useEffect, useState } from "react"
 
 export default function StoriesPage() {
   const [stories, setStories] = useState<StoryType[] | null>(null)
-  const [hudMessage, setHudMessage] = useState<HudMessageType>()
   const { user, isLoading } = useUser()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -60,16 +59,16 @@ export default function StoriesPage() {
 
       <Stack m={"auto"}>
         <Tabs
-            value={tab}
-            onChange={handleTabChange}
-            sx={{ m: "auto", w: "100%" }}
-          >
+          value={tab}
+          onChange={handleTabChange}
+          sx={{ m: "auto", w: "100%" }}
+        >
           <Tab label={UserStoriesTabEnum[0]} />
         </Tabs>
 
-      <TabPanel index={UserStoriesTabEnum.STORIES} value={tab}>
-        {getStoriesPageContent(stories as StoryType[])}
-      </TabPanel>
+        <TabPanel index={UserStoriesTabEnum.STORIES} value={tab}>
+          {getStoriesPageContent(stories as StoryType[])}
+        </TabPanel>
       </Stack>
 
       <Link

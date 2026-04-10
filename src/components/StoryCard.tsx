@@ -3,11 +3,7 @@
 import { selectedStoryAtom } from "@/lib/atoms"
 import { Genre } from "@/lib/defs"
 import { StoryType } from "@/lib/schemata/story"
-import {
-  decodeBase64Image,
-  getGenreChipLabel,
-  verifyStoryCardElement,
-} from "@/lib/utils"
+import { getGenreChipLabel, verifyStoryCardElement } from "@/lib/utils"
 import { Edit, Upgrade, Tag, Visibility } from "@mui/icons-material"
 import {
   Box,
@@ -25,7 +21,7 @@ import StoryCardSkeleton from "./skeletons/StoryCardSkeleton"
 export default function StoryCard(props: StoryType) {
   const { _id, title, createdAt, updatedAt, blurb, genre, rating, views } =
     props
-  const [selectedStory, setSelectedStory] = useAtom(selectedStoryAtom)
+  const [, setSelectedStory] = useAtom(selectedStoryAtom)
 
   if (!_id) return <StoryCardSkeleton />
 
@@ -34,8 +30,12 @@ export default function StoryCard(props: StoryType) {
       sx={{
         display: "flex",
         flexDirection: "column",
+        width: "auto",
         borderRadius: 3,
         boxShadow: 3,
+        mt: 2,
+        mx: 2,
+
         cursor: "pointer",
       }}
       onClick={() => {
@@ -46,7 +46,9 @@ export default function StoryCard(props: StoryType) {
       <Stack direction="row">
         <CardMedia
           component="img"
-          image={decodeBase64Image(props)}
+          image={
+            "https://placehold.co/300" /* At some point, we planned to have thumbnails for images */
+          }
           sx={{
             flex: 2,
             display: {
@@ -58,7 +60,9 @@ export default function StoryCard(props: StoryType) {
         />
 
         {/* Content Section */}
-        <CardContent sx={{ flex: 3, display: "flex", flexDirection: "column" }}>
+        <CardContent
+          sx={{ flex: 3, display: "flex", flexDirection: "column", gap: 1 }}
+        >
           <Typography variant="h5" fontWeight="bold" color="text.secondary">
             {title}
           </Typography>
@@ -107,11 +111,15 @@ export default function StoryCard(props: StoryType) {
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Edit fontSize="small" />
-              <Typography variant="body2">{createdAt as any}</Typography>
+              <Typography variant="body2">
+                {new Date(createdAt).toLocaleDateString()}
+              </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Upgrade fontSize="small" />
-              <Typography variant="body2">{updatedAt as any}</Typography>
+              <Typography variant="body2">
+                {new Date(updatedAt).toLocaleDateString()}
+              </Typography>
             </Box>
           </Box>
         </CardContent>

@@ -7,7 +7,11 @@
       "text_placeholder": "Search for microfiction...",
       "show_read": "Show Read"
     },
-    "no_results": "No results for your query :/",
+    "tooltip": {
+        "to_top": "Return to top"
+    },
+    "load_more": "Load More",
+    "no_results": "You have reached the end!",
     "no_suggestions": "We have no suggestions for you at the moment... Keep reading and we'll come up with some!",
     "no_suggestions_for_guest": "You need to be logged in for suggestions!"
   },
@@ -140,9 +144,9 @@
 
   "populate": {
     "story": {
-      "guest": "Generate 5 Guest Stories",
-      "fixed_genre": "Generate 10 Stories of a Single Genre By Test User",
-      "random_genres": "Generate 20 Random Stories by Random Dummy Users"
+      "guest": "Gen 5 Guest Stories",
+      "fixed_genre": "Gen 10 same-genre stories",
+      "random_genres": "Gen 20 rand-genre stories"
     },
     "delete" : {
       "stories": "Delete All Stories",

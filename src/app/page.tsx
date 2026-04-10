@@ -1,13 +1,11 @@
-"use server"
-
 import BrowseStack from "@/components/BrowseStack"
 import { Divider, Stack } from "@mui/material"
 import SearchBar from "@/components/Search"
 import StoryCardModal from "@/components/StoryCardModal"
-import { db_fetchAllStories } from "@/lib/db/get"
+import { db_updateAllStoryMetrics } from "@/lib/db/post"
 
 export default async function Home() {
-  const stories = await db_fetchAllStories()
+  await db_updateAllStoryMetrics()
 
   return (
     <>
@@ -21,7 +19,7 @@ export default async function Home() {
       >
         <SearchBar />
         <Divider />
-        <BrowseStack {...(stories as any)} />
+        <BrowseStack />
       </Stack>
     </>
   )

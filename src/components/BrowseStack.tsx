@@ -1,30 +1,33 @@
 "use client"
 
-import { Box, setRef, Stack, Tab, Tabs, Typography } from "@mui/material"
+import {
+  Container,
+  Fab,
+  Stack,
+  Tab,
+  Tabs,
+  Tooltip,
+  Typography,
+} from "@mui/material"
 import { Key, useEffect, useState } from "react"
 
-import {
-  genreAtom,
-  queryAtom,
-  selectedStoryAtom,
-  showReadAtom,
-} from "@/lib/atoms"
-import { db_fetchAllStories } from "@/lib/db/get"
+import { genreAtom, queryAtom, showReadAtom } from "@/lib/atoms"
+import { db_fetchStoriesCount, db_fetchStoryWithFilters } from "@/lib/db/get"
 import { BrowseTabEnum } from "@/lib/defs"
 import { StoryType } from "@/lib/schemata/story"
-import { applyStoryFilters, locale, sortStoryForTab } from "@/lib/utils"
-import { UserProfile, useUser } from "@auth0/nextjs-auth0/client"
+import { locale } from "@/lib/utils"
+import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
 import PageLoading from "./skeletons/PageLoading"
-import StoryCardSkeleton from "./skeletons/StoryCardSkeleton"
 import StoryCard from "./StoryCard"
 import { TabPanel } from "./TabPanel"
+import InfiniteScroll from "react-infinite-scroll-component"
+import { StoryFilter } from "@/lib/db/types"
+import { LOAD_INCREMENT } from "@/lib/decs"
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 
 export default function BrowseStack() {
-  const [allStories, setAllStories] = useState<StoryType[]>([])
-  const [filteredStories, setFilteredStories] = useState<StoryType[] | null>(
-    null,
-  )
+  const [stories, setStories] = useState<StoryType[] | null>(null)
 
   const [tab, setTab] = useState<BrowseTabEnum>(0)
 
@@ -32,64 +35,48 @@ export default function BrowseStack() {
   const [genre] = useAtom(genreAtom)
   const [showRead] = useAtom(showReadAtom)
 
-  const { user, isLoading } = useUser()
-  const [selectedStory] = useAtom(selectedStoryAtom)
+  const [limit, setLimit] = useState(LOAD_INCREMENT)
+  const [totalCount, setTotalCount] = useState<number | null>(null)
 
-  const handleTabChange = (ev: React.SyntheticEvent, val: number) => {
-    if (filteredStories === null) return // prevents switching before filters finish
+  const { user, isLoading } = useUser()
+
+  const handleTabChange = (_ev: React.SyntheticEvent, val: number) => {
+    if (stories === null) return // prevents switching before filters finish
     setTab(val)
   }
 
   // #region UseEffects
   useEffect(() => {
-    if (selectedStory) return
-    db_fetchAllStories().then((stories) => {
-      setAllStories(stories as any)
-    })
-  }, [selectedStory])
+    db_fetchStoriesCount().then((count) => setTotalCount(count))
+  }, [])
 
   useEffect(() => {
-    if (allStories.length === 0) return
-    setFilteredStories(null)
+    if (limit === LOAD_INCREMENT) setLimit(LOAD_INCREMENT + 1)
+    else setLimit(LOAD_INCREMENT)
+  }, [tab])
 
-    applyStoryFilters(allStories, user as UserProfile, query, genre, showRead)
-      .then((stories) => sortStoryForTab(stories, user?.sub as string, tab))
-      .then((stories) => setFilteredStories(stories))
-  }, [allStories, query, genre, showRead, tab])
+  useEffect(() => {
+    let filters: StoryFilter = {
+      tab,
+      limit: limit,
+      userId: user?.sub as string,
+      title: query,
+      genre: genre,
+      showRead: showRead,
+    }
+
+    db_fetchStoryWithFilters(filters).then((stories) => {
+      setStories(stories as StoryType[])
+    })
+  }, [showRead, query, genre, user, limit])
   // #endregion
 
   function generateStoryCards() {
-    if (filteredStories === null)
-      return (
-        <>
-          <StoryCardSkeleton />
-          <StoryCardSkeleton />
-          <StoryCardSkeleton />
-        </>
-      )
+    if (stories === null || stories.length === 0) return []
 
-    if (filteredStories.length > 0)
-      return filteredStories.map((story) => (
-        <StoryCard key={story._id as Key} {...story} />
-      ))
-
-    if (tab === BrowseTabEnum.SUGGESTED)
-      if (!user)
-        return (
-          <Typography variant="body1">
-            {locale("browse.no_suggestions_for_guest")}
-          </Typography>
-        )
-      else
-        return (
-          <Typography variant="body1">
-            {locale("browse.no_suggestions")}
-          </Typography>
-        )
-
-    return (
-      <Typography variant="body1">{locale("browse.no_results")}</Typography>
-    )
+    return stories.map((story) => (
+      <StoryCard key={story._id as Key} {...story} />
+    ))
   }
 
   if (isLoading) return <PageLoading />
@@ -97,6 +84,23 @@ export default function BrowseStack() {
   return (
     <>
       <Stack m={"auto"}>
+        <Tooltip title={locale("browse.tooltip.to_top")}>
+          <Fab
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: "smooth" })
+            }}
+            size="large"
+            color="primary"
+            sx={{
+              position: "fixed",
+              bottom: "5vh",
+              right: "5vw",
+              display: limit > LOAD_INCREMENT ? "flex" : "none",
+            }}
+          >
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </Tooltip>
         <Tabs
           value={tab}
           onChange={handleTabChange}
@@ -108,15 +112,51 @@ export default function BrowseStack() {
         </Tabs>
 
         <TabPanel index={BrowseTabEnum.NEW} value={tab}>
-          {generateStoryCards()}
+          <InfiniteScroll
+            next={() => setLimit(limit + LOAD_INCREMENT)}
+            hasMore={totalCount !== null && totalCount > limit}
+            dataLength={stories?.length ?? 0}
+            endMessage={
+              <Typography variant="body1" align="center">
+                {locale("browse.no_results")}
+              </Typography>
+            }
+            loader={<></>}
+          >
+            <Stack p={1}>{generateStoryCards()}</Stack>
+          </InfiniteScroll>
         </TabPanel>
 
         <TabPanel index={BrowseTabEnum.TOP} value={tab}>
-          {generateStoryCards()}
+          <InfiniteScroll
+            next={() => setLimit(limit + LOAD_INCREMENT)}
+            hasMore={totalCount !== null && totalCount > limit}
+            dataLength={stories?.length ?? 0}
+            endMessage={
+              <Typography variant="body1" align="center">
+                {locale("browse.no_results")}
+              </Typography>
+            }
+            loader={<></>}
+          >
+            <Stack p={1}>{generateStoryCards()}</Stack>
+          </InfiniteScroll>
         </TabPanel>
 
         <TabPanel index={BrowseTabEnum.SUGGESTED} value={tab}>
-          {generateStoryCards()}
+          <InfiniteScroll
+            next={() => setLimit(limit + LOAD_INCREMENT)}
+            hasMore={totalCount !== null && totalCount > limit}
+            dataLength={stories?.length ?? 0}
+            endMessage={
+              <Typography variant="body1" align="center">
+                {locale("browse.no_suggestions")}
+              </Typography>
+            }
+            loader={<></>}
+          >
+            <Stack p={1}>{generateStoryCards()}</Stack>
+          </InfiniteScroll>
         </TabPanel>
       </Stack>
     </>

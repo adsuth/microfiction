@@ -38,20 +38,15 @@ export default function StoryCardModal() {
 
     setOpen(true)
 
-    auth0_fetchUserById(story.userId)
-      .then(
-        (fetchedAuthor: UserProfile | null) => {
-          db_addActivity(
-            story._id as string,
-            user?.sub as string
-          )
-          setAuthor(fetchedAuthor)
-        }
+    auth0_fetchUserById(story.userId).then(
+      (fetchedAuthor: UserProfile | null) => {
+        db_addActivity(story._id as string, user?.sub as string)
+        setAuthor(fetchedAuthor)
+      },
     )
   }, [story, isLoading])
 
-  function handleSetOpen(newValue: boolean)
-  {
+  function handleSetOpen(newValue: boolean) {
     setOpen(newValue)
   }
 
@@ -85,7 +80,7 @@ export default function StoryCardModal() {
 
           {/* Card Header */}
           <CardHeader
-            sx={{paddingBottom: 0}}
+            sx={{ paddingBottom: 0 }}
             avatar={
               <Avatar
                 sx={{ bgcolor: grey[500] }}
@@ -116,15 +111,19 @@ export default function StoryCardModal() {
             {/* Metadata */}
             <Box mt={2} display="flex" justifyContent="space-between">
               <Typography variant="body2" color="text.secondary">{`${locale(
-                "misc.created"
-              )} ${story.createdAt}`}</Typography>
+                "misc.created",
+              )} ${new Date(story.createdAt).toLocaleString()}`}</Typography>
               <Typography variant="body2" color="text.secondary">{`${locale(
-                "misc.updated"
-              )} ${story.updatedAt}`}</Typography>
+                "misc.updated",
+              )} ${new Date(story.updatedAt).toLocaleString()}`}</Typography>
             </Box>
 
             {/* User Rating */}
-            <StoryRating userId={user?.sub as string} storyId={story._id as string} authorId={story.userId} />
+            <StoryRating
+              userId={user?.sub as string}
+              storyId={story._id as string}
+              authorId={story.userId}
+            />
           </CardContent>
         </Card>
       </Modal>

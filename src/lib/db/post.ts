@@ -7,7 +7,7 @@ import Rating from "../schemata/rating"
 import Story, { StoryType } from "../schemata/story"
 import { dbout } from "../utils"
 import dbConnect from "./connect"
-import { auth0_fetchUserById, db_removeRatingFromUserOnStory } from "./get"
+import { auth0_fetchUserById, db_fetchAllStoriesWithMetrics, db_removeRatingFromUserOnStory } from "./get"
 import { LogIcon, PERFORM_DATABASE_ACTION } from "./types"
 
 //#region Activity
@@ -152,3 +152,25 @@ export async function db_updateRating(
   }
 }
 //#endregion
+
+export async function db_updateAllStoryMetrics() {
+    const storiesWithMetrics = await db_fetchAllStoriesWithMetrics()
+    
+    await PERFORM_DATABASE_ACTION(() =>
+        Story.bulkWrite(
+            storiesWithMetrics.map((story) => ({
+                updateOne: {
+                    filter: { _id: story._id },
+                    update: { $set: { 
+                        rating: story.rating,
+                        ratingUpdatedAt: new Date,
+                        views: story.views,
+                        viewsUpdatedAt: new Date
+                    } }
+                }
+            }))
+        )
+    )
+
+    dbout(LogIcon.INFO, `Updated ${storiesWithMetrics.length} stories`)
+}

@@ -161,15 +161,6 @@ export function inferVisibility(vis: boolean) {
   return vis ? Visibility.PUBLIC : Visibility.PRIVATE
 }
 
-export function decodeBase64Image(story: StoryType) {
-  const { thumbnail, genre } = story
-
-  if (!thumbnail)
-    return `https://placehold.co/400`
-  const buffer = Buffer.from(thumbnail, "base64")
-  return `data:image/png;base64,${buffer.toString("base64")}`
-}
-
 /**
  * Determine if the user can view the story.
  * PUBLIC -> viewable by all
@@ -231,7 +222,7 @@ export async function applyStoryFilters(
 /**
  * Suggests stories to user based on their most rated genre. This will then suggest some unread stories of their most rated genre.
  */
-export async function suggestStories(allStories: StoryType[], userId: string) {
+export async function suggestStories(allStories: StoryType[], userId: string | null) {
   if (!userId) return []
   interface GenreRatings {
     [genre: number]: number

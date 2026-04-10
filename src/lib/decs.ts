@@ -18,3 +18,5 @@ export const GUEST_USER: UserProfile = {
 
 // time in ms that a guest must wait before posting again (5 mins)
 export const GUEST_UPLOAD_TIMEOUT = 1_000 * 5 * 60
+
+export const LOAD_INCREMENT = 20

@@ -1,3 +1,4 @@
+import { BrowseTabEnum, Genre } from "../defs"
 import { json } from "../utils"
 import dbConnect from "./connect"
 
@@ -13,6 +14,15 @@ export enum LogIcon {
 /// Store types for the database here
 export type DBUserRecord = {
   name: string
+}
+
+export type StoryFilter = {
+    userId: string | null,
+    title: string,
+    tab: BrowseTabEnum,
+    limit: number,
+    genre: Genre,
+    showRead: boolean,
 }
 
 export enum QueryType

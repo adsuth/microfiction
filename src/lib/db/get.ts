@@ -7,12 +7,14 @@ import { GUEST_USER, GUEST_USER_ID } from "../decs"
 import Activity from "../schemata/activity"
 import Rating, { RatingType } from "../schemata/rating"
 import Story, { StoryType } from "../schemata/story"
-import { calcWeightedRating, dbout, json } from "../utils"
-import { LogIcon, PERFORM_DATABASE_ACTION } from "./types"
+import { calcWeightedRating, dbout, json, suggestStories } from "../utils"
+import { LogIcon, PERFORM_DATABASE_ACTION, StoryFilter } from "./types"
 import { db_like } from "./utils"
+import story from "../schemata/story"
+import { BrowseTabEnum, Genre, Visibility } from "../defs"
 
 //#region Story getters
-export async function db_fetchAllStories() {
+export async function db_fetchAllStoriesWithMetrics(staleOnly: boolean = true) {
   const raw_stories = await db_fetchStoriesByTitle("")
 
   const stories = await Promise.all(
@@ -21,11 +23,66 @@ export async function db_fetchAllStories() {
     }))
   )
 
+  // 12 = 12 hours
+  const staleThreshold = new Date(Date.now() - 12 * 60 * 60 * 1000)
+
   const storiesWithMetrics = await Promise.all(
-    stories.map(db_getFullStoryMetrics)
+    stories
+        .filter((row: StoryType) => {
+            if (!row.metricsLastUpdated)
+                return true
+
+            return !staleOnly || row.metricsLastUpdated || new Date(row.metricsLastUpdated) > staleThreshold
+        })
+        .map(db_getFullStoryMetrics)
   )
 
   return storiesWithMetrics
+}
+
+export async function db_fetchStoriesCount() {
+    return await PERFORM_DATABASE_ACTION(() => Story.countDocuments())
+}
+
+export async function db_fetchStoryWithFilters(filters: StoryFilter) {
+    if (filters.tab === BrowseTabEnum.SUGGESTED)
+        return suggestStories(
+            await PERFORM_DATABASE_ACTION(() => Story.find()),
+            filters.userId)
+
+    const stories = await PERFORM_DATABASE_ACTION(() =>
+        Story
+            .find()
+            .limit(filters.limit)
+            .sort(filters.tab === BrowseTabEnum.NEW 
+                ? { createdAt: "desc" }
+                : filters.tab === BrowseTabEnum.TOP
+                ? { rating: "desc" }
+                : {})
+    )
+
+    const filteredStories = await Promise.all(
+        stories.map(async (story: StoryType) => {
+            if (story.visibility !== Visibility.PUBLIC && story.userId !== filters.userId)
+                return null
+            
+            let isRead = await db_hasReadStory(story._id as string, filters.userId)
+
+            if (!filters.showRead && !isRead)
+                return null
+
+            if (filters.genre !== story.genre && filters.genre !== Genre.NONE)
+                return null
+
+            return story
+        })
+    ).then(results => results.filter((s): s is StoryType => s !== null))
+
+
+    const limitedStories = filteredStories.slice(0, filters.limit)
+    dbout(LogIcon.INFO, `Fetched ${filteredStories.length} filtered stories, ${limitedStories.length} were returned with limit of ${filters.limit}`)
+
+    return limitedStories
 }
 
 export async function db_getFullStoryMetrics(story: StoryType) {
@@ -63,10 +120,10 @@ export async function db_getAverageRatingForStoryById(
     allRatings.reduce((acc: number, r: RatingType) => acc + r.rating, 0) /
     allRatings.length
 
-  dbout(
-    LogIcon.INFO,
-    `Average rating from ${allRatings.length} reviews was ${averageRating}`
-  )
+//   dbout(
+//     LogIcon.INFO,
+//     `Average rating from ${allRatings.length} reviews was ${averageRating}`
+//   )
 
   return averageRating
 }
@@ -81,7 +138,7 @@ export async function db_getStoryViews(_id: string | mongoose.Types.ObjectId) {
   const allViews = await PERFORM_DATABASE_ACTION(() =>
     Activity.find({ storyId: _id })
   )
-  dbout(LogIcon.INFO, `View count was ${allViews.length}`)
+//   dbout(LogIcon.INFO, `View count was ${allViews.length}`)
   return allViews.length
 }
 
@@ -265,8 +322,10 @@ export async function db_getUserActivity(userId: string) {
  */
 export async function db_hasReadStory(
   storyId: string,
-  userId: string
+  userId: string | null
 ): Promise<boolean> {
+  if (userId === null)
+    return false
 
   return !!(await PERFORM_DATABASE_ACTION(() =>
     Activity.findOne({ storyId, userId })

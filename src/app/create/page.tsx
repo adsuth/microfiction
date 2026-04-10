@@ -173,10 +173,19 @@ export default function Create() {
       <form
         onSubmit={(e) => {
           e.preventDefault()
-          // handleSave()
         }}
       >
-        <Stack gap={4} sx={{ p: 0, m: "auto" }}>
+        <Stack
+          gap={4}
+          sx={{
+            m: "auto",
+            px: {
+              xs: 2,
+              md: 4,
+            },
+            py: 2,
+          }}
+        >
           <Tooltip
             placement="bottom-start"
             title={locale("create.tooltip.title")}
@@ -185,7 +194,7 @@ export default function Create() {
               label={locale("create.labels.title")}
               variant="standard"
               value={title}
-              slotProps={{ htmlInput: { maxLength: 50 } }}
+              inputProps={{ maxLength: 50 }}
               required
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setTitle(event.target.value)
@@ -200,7 +209,7 @@ export default function Create() {
             <TextField
               label={locale("create.labels.blurb")}
               variant="outlined"
-              slotProps={{ htmlInput: { maxLength: 50 } }}
+              inputProps={{ maxLength: 50 }}
               value={blurb}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setBlurb(event.target.value)
@@ -226,6 +235,7 @@ export default function Create() {
               )}
             >
               <FormControlLabel
+                sx={{ mb: 2, textAlign: "center" }}
                 labelPlacement="bottom"
                 label={locale(
                   `create.labels.visibility_${
@@ -249,7 +259,7 @@ export default function Create() {
           <TextField
             label={locale("create.labels.content")}
             minRows={5}
-            slotProps={{ htmlInput: { maxLength: 500 } }}
+            inputProps={{ maxLength: 500 }}
             multiline
             value={content}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

@@ -52,19 +52,42 @@ const schema = new Schema(
       },
       default: 0,
     },
-
-    thumbnail: {
-      type: String,
-      default: null,
+    rating: {
+        type: Number,
+        default: 0,
+        validate: {
+            validator: (num: number) => {
+                return num >= 0 && num <= 5
+            },
+            message: "{VALUE} must be within the range 0 -> 5",
+        },
     },
+    views: {
+        type: Number,
+        default: 0,
+        validate: {
+            validator: (num: number) => {
+                return Number.isFinite(num)
+            },
+            message: "{VALUE} must be a finite number",
+        },
+    },
+    metricsLastUpdated: {
+        type: Date,
+        validate: {
+            validator: (date: Date) => {
+                return date instanceof Date && !isNaN(date.getTime())
+            },
+            message: "{VALUE} must be a valid date",
+        },
+    },
+
   },
   { timestamps: true }
 )
 
 type StoryType = InferSchemaType<typeof schema> & {
   _id: mongoose.Types.ObjectId | string
-  rating?: number
-  views?: number
   timestamp?: number
   createdAt: Date | NativeDate | string
   updatedAt: Date | NativeDate | string
