@@ -74,3 +74,7 @@ export enum PopulateActionType {
   DELETE_ALL_ACTIVITY,
   DELETE_ALL_RATINGS,
 }
+
+export enum DevActionType {
+    REFRESH_METRICS = 0,
+}

@@ -153,9 +153,13 @@
       "activity": "Delete All User Activity",
       "ratings": "Delete All User Ratings (Includes Activity)"
     },
+    "dev": {
+        "refresh_metrics": "Refresh Story Metrics"
+    },
     "header": {
       "story": "Populate Stories",
-      "delete": "Delete Actions"
+      "delete": "Delete Actions",
+      "dev": "Dev Actions"
     } 
   }
 }

@@ -36,7 +36,7 @@ export default function BrowseStack() {
   const [genre] = useAtom(genreAtom)
   const [showRead] = useAtom(showReadAtom)
 
-  const [limit, setLimit] = useState(LOAD_INCREMENT)
+  const [limit, setLimit] = useState(0)
   const [totalCount, setTotalCount] = useState<number | null>(null)
 
   const { user, isLoading } = useUser()

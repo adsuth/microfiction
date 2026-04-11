@@ -45,6 +45,8 @@ export async function db_fetchStoriesCount() {
 }
 
 export async function db_fetchStoryWithFilters(filters: StoryFilter) {
+    if (filters.limit === 0) return []
+    
     if (filters.tab === BrowseTabEnum.SUGGESTED)
         return suggestStories(
             await PERFORM_DATABASE_ACTION(() => Story.find()),
