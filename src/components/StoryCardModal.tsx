@@ -3,7 +3,6 @@
 import { selectedStoryAtom } from "@/lib/atoms"
 import { auth0_fetchUserById } from "@/lib/db/get"
 import { db_addActivity } from "@/lib/db/post"
-import { GUEST_USER, GUEST_USER_ID } from "@/lib/decs"
 import { locale } from "@/lib/utils"
 import { UserProfile, useUser } from "@auth0/nextjs-auth0/client"
 import CloseIcon from "@mui/icons-material/Close"
