@@ -25,6 +25,7 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import { StoryFilter } from "@/lib/db/types"
 import { LOAD_INCREMENT } from "@/lib/decs"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
+import StoryCardSkeleton from "./skeletons/StoryCardSkeleton"
 
 export default function BrowseStack() {
   const [stories, setStories] = useState<StoryType[] | null>(null)
@@ -51,8 +52,8 @@ export default function BrowseStack() {
   }, [])
 
   useEffect(() => {
-    if (limit === LOAD_INCREMENT) setLimit(LOAD_INCREMENT + 1)
-    else setLimit(LOAD_INCREMENT)
+    setStories(null)
+    setLimit(LOAD_INCREMENT + +(limit === LOAD_INCREMENT)) // force a clean set of limit
   }, [tab])
 
   useEffect(() => {
@@ -72,7 +73,14 @@ export default function BrowseStack() {
   // #endregion
 
   function generateStoryCards() {
-    if (stories === null || stories.length === 0) return []
+    if (stories === null || stories.length === 0)
+      return (
+        <>
+          <StoryCardSkeleton />
+          <StoryCardSkeleton />
+          <StoryCardSkeleton />
+        </>
+      )
 
     return stories.map((story) => (
       <StoryCard key={story._id as Key} {...story} />

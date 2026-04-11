@@ -2,11 +2,8 @@ import BrowseStack from "@/components/BrowseStack"
 import { Divider, Stack } from "@mui/material"
 import SearchBar from "@/components/Search"
 import StoryCardModal from "@/components/StoryCardModal"
-import { db_updateAllStoryMetrics } from "@/lib/db/post"
 
 export default async function Home() {
-  await db_updateAllStoryMetrics()
-
   return (
     <>
       <StoryCardModal />
