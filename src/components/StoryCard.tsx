@@ -47,7 +47,7 @@ export default function StoryCard(props: StoryType) {
         <CardMedia
           component="img"
           image={
-            "https://placehold.co/300" /* At some point, we planned to have thumbnails for images */
+            `https://picsum.photos/300?seed=${_id}` /* At some point, we planned to have thumbnails for images */
           }
           sx={{
             flex: 2,
