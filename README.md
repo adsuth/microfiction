@@ -24,7 +24,7 @@ Logging in, you will have access to more functionality, including the developer 
 
 The site also has a leaderboard that rates the top three authors and readers based on metrics.
 
-These metrics are updated every 15 minutes by a CRON web job or via the developer menu
+These metrics are updated every hour by a CRON web job or via the developer menu
 
 ## Technologies
 | Element | Technology |
@@ -34,4 +34,4 @@ These metrics are updated every 15 minutes by a CRON web job or via the develope
 | Database | MongoDB |
 | Authentication | Auth0 |
 
-The app has a Cron Web Job to update the metrics of each of the stories (average rating, view count et cetera) every 15 minutes.
+The app has a Cron Web Job to update the metrics of each of the stories (average rating, view count et cetera) every hour — though I have since disabled the job as of 13 May 2026 as the site is inactive. Testers that have logged in can manually run the job via the dev menu.
