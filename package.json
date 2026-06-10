@@ -1,6 +1,6 @@
 {
-  "name": "Microfiction",
-  "version": "1.1.0",
+  "name": "microfiction",
+  "version": "1.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -17,11 +17,11 @@
     "@mui/icons-material": "^5.18.0",
     "@mui/material": "^5.10.16",
     "@mui/material-nextjs": "^5.10.16",
-    "axios": "^1.15.0",
     "jotai": "^2.12.1",
     "microfiction": "file:",
     "mongoose": "^8.10.0",
     "next": "^15.2.8",
+    "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-infinite-scroll-component": "^7.0.1"

@@ -16,6 +16,8 @@ export const GUEST_USER: UserProfile = {
   picture: undefined,
 }
 
+export const AUTH0_USERS_ENDPOINT: string = "https://adsuth.uk.auth0.com/api/v2/users"
+
 // time in ms that a guest must wait before posting again (5 mins)
 export const GUEST_UPLOAD_TIMEOUT = 1_000 * 5 * 60
 
