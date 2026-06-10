@@ -1,16 +1,14 @@
 "use server"
 
 import { UserProfile } from "@auth0/nextjs-auth0/client"
-import axios from "axios"
 import mongoose from "mongoose"
-import { GUEST_USER, GUEST_USER_ID } from "../decs"
+import { AUTH0_USERS_ENDPOINT, GUEST_USER, GUEST_USER_ID } from "../decs"
 import Activity from "../schemata/activity"
 import Rating, { RatingType } from "../schemata/rating"
 import Story, { StoryType } from "../schemata/story"
 import { calcWeightedRating, dbout, json, suggestStories } from "../utils"
 import { LogIcon, PERFORM_DATABASE_ACTION, StoryFilter } from "./types"
 import { db_like } from "./utils"
-import story from "../schemata/story"
 import { BrowseTabEnum, Genre, Visibility } from "../defs"
 
 //#region Story getters
@@ -163,13 +161,12 @@ export async function auth0_fetchUserByName(
 ): Promise<UserProfile> {
   const options = {
     method: "GET",
-    url: "https://adsuth.uk.auth0.com/api/v2/users",
     params: { q: `nickname:"${name}"`, search_engine: "v3" },
     headers: { authorization: `Bearer ${process.env.AUTH0_API_ACCESS_TOKEN}` },
   }
 
-  const response = await axios(options)
-  const data = response && response.data ? json(response.data) : null
+  const res = await fetch(AUTH0_USERS_ENDPOINT, options)
+  const data = await res.json()
 
   if (!data) dbout(LogIcon.INFO, `No user found with nickname: ${name}`)
 
@@ -184,13 +181,12 @@ export async function auth0_fetchUserById(
 
   const options = {
     method: "GET",
-    url: "https://adsuth.uk.auth0.com/api/v2/users",
     params: { q: `user_id:"${id}"`, search_engine: "v3" },
     headers: { authorization: `Bearer ${process.env.AUTH0_API_ACCESS_TOKEN}` },
   }
 
-  const response = await axios(options)
-  const data = response && response.data ? json(response.data) : null
+  const res = await fetch(AUTH0_USERS_ENDPOINT, options)
+  const data = await res.json()
 
   if (!data) dbout(LogIcon.INFO, `No user found with id...`)
 
