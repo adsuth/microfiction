@@ -7,20 +7,32 @@ import { GenrePicker } from "./GenrePicker"
 import { Switch, FormControlLabel } from "@mui/material"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { Genre } from "@/lib/defs"
+import { useEffect, useState } from "react"
 
 export default function SearchBar() {
-  const [query, setQuery] = useAtom(queryAtom)
+  const [currentQuery, setCurrentQuery] = useState("")
+  const [, setQuery] = useAtom(queryAtom)
+
   const [showRead, setShowRead] = useAtom(showReadAtom)
   const [genre, setGenre] = useAtom(genreAtom)
 
-  const {user, isLoading} = useUser()
+  const { user, isLoading } = useUser()
+
+  // throttle/debounce the text input; only fire after the user has stopped typing
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setQuery(currentQuery.toLowerCase())
+    }, 400)
+
+    return () => clearTimeout(handler)
+  }, [currentQuery])
 
   return (
     <>
       <TextField
         placeholder={locale("browse.search.text_placeholder")}
-        value={query}
-        onChange={(ev) => setQuery(ev.target.value.toLowerCase())}
+        value={currentQuery}
+        onChange={(ev) => setCurrentQuery(ev.target.value)}
       />
       <Stack direction={"row"} sx={{placeItems:"center"}}>
         <Box sx={{ flex: 5 }}>
