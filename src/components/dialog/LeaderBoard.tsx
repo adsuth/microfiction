@@ -34,9 +34,13 @@ export default function LeaderBoard(props: DialogProps) {
   const [topThreeReaders, setTopThreeReaders] = useState<UserProfile[]>([])
 
   useEffect(() => {
+    if (!open) {
+      return
+    }
+
     db_fetchTopThreeAuthors().then((topThree) => setTopThreeAuthors(topThree))
     db_fetchTopThreeReaders().then((topThree) => setTopThreeReaders(topThree))
-  }, [])
+  }, [open])
 
   function renderTopThree(topThree: UserProfile[]) {
     if (topThree.length === 0)
