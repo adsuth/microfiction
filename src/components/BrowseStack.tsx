@@ -1,14 +1,6 @@
 "use client"
 
-import {
-  Container,
-  Fab,
-  Stack,
-  Tab,
-  Tabs,
-  Tooltip,
-  Typography,
-} from "@mui/material"
+import { Fab, Stack, Tab, Tabs, Tooltip, Typography } from "@mui/material"
 import { Key, useEffect, useState } from "react"
 
 import { genreAtom, queryAtom, showReadAtom } from "@/lib/atoms"
@@ -81,12 +73,24 @@ export default function BrowseStack() {
           <StoryCardSkeleton />
         </>
       )
-    if (stories.length === 0)
+
+    let noResultMessage
+
+    if (stories.length === 0) {
+      if (tab === BrowseTabEnum.SUGGESTED) {
+        noResultMessage = user
+          ? locale("browse.no_suggestions")
+          : locale("browse.no_suggestions_for_guest")
+      } else {
+        locale("browse.no_results")
+      }
+
       return (
         <Typography variant="body1" align="center">
-          {locale("browse.no_results")}
+          {noResultMessage}
         </Typography>
       )
+    }
 
     return stories.map((story) => (
       <StoryCard key={story._id as Key} {...story} />
@@ -169,6 +173,11 @@ export default function BrowseStack() {
             }
             loader={<></>}
           >
+            <Typography variant="body1" align="center">
+              {user && (stories?.length ?? 0) > 0
+                ? locale("browse.suggestions_intro")
+                : ""}
+            </Typography>
             <Stack p={1}>{generateStoryCards()}</Stack>
           </InfiniteScroll>
         </TabPanel>

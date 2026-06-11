@@ -13,6 +13,7 @@
     "load_more": "Load More",
     "no_results": "No results with your filters :/",
     "end_of_results": "You have reached the end!",
+    "suggestions_intro": "Here are our (not so) curated picks for you based on the microfictions you've read before.",
     "no_suggestions": "We have no suggestions for you at the moment... Keep reading and we'll come up with some!",
     "no_suggestions_for_guest": "You need to be logged in for suggestions!"
   },
