@@ -29,7 +29,7 @@ export default function StoryCardModal() {
   const [author, setAuthor] = useState<UserProfile | null>(null)
   const { user, isLoading } = useUser()
 
-  const [story, setStory] = useAtom(selectedStoryAtom)
+  const [story] = useAtom(selectedStoryAtom)
 
   useEffect(() => {
     if (!story) return
@@ -37,6 +37,7 @@ export default function StoryCardModal() {
 
     setOpen(true)
 
+    // this should be in a lookup!
     auth0_fetchUserById(story.userId).then(
       (fetchedAuthor: UserProfile | null) => {
         db_addActivity(story._id as string, user?.sub as string)
