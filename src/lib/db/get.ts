@@ -52,7 +52,7 @@ export async function db_fetchStoryWithFilters(filters: StoryFilter) {
 
     const stories = await PERFORM_DATABASE_ACTION(() =>
         Story
-            .find()
+            .find({title: { $regex: filters.title, $options: "i" }})
             .limit(filters.limit)
             .sort(filters.tab === BrowseTabEnum.NEW 
                 ? { createdAt: "desc" }

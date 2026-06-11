@@ -32,7 +32,7 @@ export default function BrowseStack() {
 
   const [tab, setTab] = useState<BrowseTabEnum>(0)
 
-  const [query] = useAtom<string>(queryAtom)
+  const [query] = useAtom(queryAtom)
   const [genre] = useAtom(genreAtom)
   const [showRead] = useAtom(showReadAtom)
 
@@ -73,13 +73,19 @@ export default function BrowseStack() {
   // #endregion
 
   function generateStoryCards() {
-    if (stories === null || stories.length === 0)
+    if (stories === null)
       return (
         <>
           <StoryCardSkeleton />
           <StoryCardSkeleton />
           <StoryCardSkeleton />
         </>
+      )
+    if (stories.length === 0)
+      return (
+        <Typography variant="body1" align="center">
+          {locale("browse.no_results")}
+        </Typography>
       )
 
     return stories.map((story) => (
@@ -126,7 +132,7 @@ export default function BrowseStack() {
             dataLength={stories?.length ?? 0}
             endMessage={
               <Typography variant="body1" align="center">
-                {locale("browse.no_results")}
+                {locale("browse.end_of_results")}
               </Typography>
             }
             loader={<></>}
@@ -142,7 +148,7 @@ export default function BrowseStack() {
             dataLength={stories?.length ?? 0}
             endMessage={
               <Typography variant="body1" align="center">
-                {locale("browse.no_results")}
+                {locale("browse.end_of_results")}
               </Typography>
             }
             loader={<></>}
